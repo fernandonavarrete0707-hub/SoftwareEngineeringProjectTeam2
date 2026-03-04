@@ -10,6 +10,7 @@ function buildTeamGrid(containerId, teamPrefix) {
     slot.innerHTML = `<span class="checkbox"></span><span class="slotnum">${i}</span>`;
     grid.appendChild(slot);
 
+
     const id = document.createElement("input");
     id.className = "cell";
     id.type = "text";
@@ -23,6 +24,14 @@ function buildTeamGrid(containerId, teamPrefix) {
     code.placeholder = "codename";
     code.id = `${teamPrefix}_code_${i}`;
     grid.appendChild(code);
+
+    //added the third column
+    const hardware = document.createElement("input");
+    hardware.className = "cell";
+    hardware.type = "text";
+    hardware.placeholder = "hardware id";
+    hardware.id = `${teamPrefix}_hw_${i}`;
+    grid.appendChild(hardware);
   }
 }
 
@@ -124,14 +133,18 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 0; i < 15; i++)
     {
       if(document.getElementById(`red_pid_${i}`).value != "" )
-      players.push(document.getElementById(`red_pid_${i}`).value)
+        players.push(document.getElementById(`red_pid_${i}`).value)
       if(document.getElementById(`red_code_${i}`).value != "")
-      players.push(document.getElementById(`red_code_${i}`).value)
-      if(document.getElementById(`green_pid_${i}`).value != "")
-      players.push(document.getElementById(`green_pid_${i}`).value)
-      if(document.getElementById(`green_code_${i}`).value != "")
-      players.push(document.getElementById(`green_code_${i}`).value)
+        players.push(document.getElementById(`red_code_${i}`).value)
+      if(document.getElementById(`red_hw_${i}`).value != "")
+        players.push(document.getElementById(`red_hw_${i}`).value)
 
+      if(document.getElementById(`green_pid_${i}`).value != "")
+        players.push(document.getElementById(`green_pid_${i}`).value)
+      if(document.getElementById(`green_code_${i}`).value != "")
+        players.push(document.getElementById(`green_code_${i}`).value)
+      if(document.getElementById(`green_hw_${i}`).value != "")
+        players.push(document.getElementById(`green_hw_${i}`).value)
     }
 
     try

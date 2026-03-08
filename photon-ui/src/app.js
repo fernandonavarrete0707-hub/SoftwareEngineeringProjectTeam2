@@ -23,6 +23,14 @@ function buildTeamGrid(containerId, teamPrefix) {
     code.placeholder = "codename";
     code.id = `${teamPrefix}_code_${i}`;
     grid.appendChild(code);
+
+    //added the third column
+    const hardware = document.createElement("input");
+    hardware.className = "cell";
+    hardware.type = "text";
+    hardware.placeholder = "hardware id";
+    hardware.id = `${teamPrefix}_hw_${i}`;
+    grid.appendChild(hardware);
   }
 }
 

@@ -124,12 +124,14 @@ body{
 .team.red .team-label{ color:#ff6a6a; }
 .team.green .team-label{ color:#60ff60; }
 
+/*changed the grid layout so it can fit the third column*/
 .grid{
   display:grid;
-  grid-template-columns: 46px 1fr 1fr;
+  grid-template-columns: 46px 110px 1fr 110px; 
   gap: 6px 8px;
   align-items:center;
 }
+
 
 .slot{
   display:flex;

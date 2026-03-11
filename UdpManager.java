@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class UdpManager {
     private final DatagramSocket sendSocket;
     private final DatagramSocket recvSocket;
-    private final DatagramSocket recvSocket7500;
+
 
     private InetAddress networkAddress;
 
@@ -24,13 +24,11 @@ public class UdpManager {
         String initialNetworkAddress = "127.0.0.1";
         this.networkAddress = InetAddress.getByName(initialNetworkAddress);
 
+
+        // 7500 for broadcasting messages to the network
         this.sendSocket = new DatagramSocket();
         this.sendSocket.setBroadcast(true);
 
-        // 7500 for broadcasting messages to the network
-        this.recvSocket7500 = new DatagramSocket(null);
-        this.recvSocket7500.setReuseAddress(true);
-        this.recvSocket7500.bind(new InetSocketAddress("0.0.0.0", broadcastPort)); 
 
         // 7501 for receiving player IDs from the network
         this.recvSocket = new DatagramSocket(null);
@@ -72,7 +70,6 @@ public class UdpManager {
 
     public void startReceiverLoop(Consumer<String> onMessage) {
         startLoop(recvSocket, "udp-receiver-7501", onMessage);
-        startLoop(recvSocket7500, "udp-receiver-7500", onMessage);
     }
 
     private void startLoop(DatagramSocket socket, String name, Consumer<String> onMessage) {
@@ -96,7 +93,6 @@ public class UdpManager {
     // close sockets 
     public void close() {
         recvSocket.close();
-        recvSocket7500.close();
         sendSocket.close();
     }
 }

@@ -1,6 +1,6 @@
 //this file is only responsible for splash & entry and building the entry grid
 
-const BASE_ICON_PATH = "../assets/base.png"; //sprint 4 update
+const BASE_ICON_PATH = "../assets/baseicon.jpg"; //sprint 4 update
 
 let redPlayersState = []; //sprint 4 update
 let greenPlayersState = []; //sprint 4 update

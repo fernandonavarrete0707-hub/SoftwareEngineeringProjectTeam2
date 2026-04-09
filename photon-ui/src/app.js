@@ -1,5 +1,10 @@
 //this file is only responsible for splash & entry and building the entry grid
 
+const BASE_ICON_PATH = "../assets/base.png"; //sprint 4 update
+
+let redPlayersState = []; //sprint 4 update
+let greenPlayersState = []; //sprint 4 update
+
 function buildTeamGrid(containerId, teamPrefix) {
   const grid = document.getElementById(containerId);
 
@@ -48,30 +53,24 @@ function clearPlayers() {
   }
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
-  //building grids to be similar to the layout in the slides
   buildTeamGrid("redGrid", "red");
   buildTeamGrid("greenGrid", "green");
 
-  //splashtiming - 3 seconds & offers the click to skip
   const skipBtn = document.getElementById("skipSplash");
   skipBtn.addEventListener("click", showEntry);
 
   setTimeout(showEntry, 3000);
 
-  //clear game button
   document.getElementById("clearBtn").addEventListener("click", () => {
     clearPlayers();
   });
 
-  //f3 start game opens the play action display
-  document.getElementById("startBtn").addEventListener("click", () => {
-    e.stopImmediatePropagation();
+  document.getElementById("startBtn").addEventListener("click", (e) => { //sprint 4 update
+    e.stopImmediatePropagation(); //sprint 4 update
     showPlayActionDisplay();
   });
 
-  //i made the keyboard shortcuts similar to what prof Strother had in his slides
   document.addEventListener("keydown", (e) => {
     if (e.key === "F12") {
       e.preventDefault();
@@ -89,6 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       document.getElementById("play").classList.add("hidden");
       document.getElementById("entry").classList.remove("hidden");
+
+      redPlayersState = []; //sprint 4 update
+      greenPlayersState = []; //sprint 4 update
     }
   });
 });
@@ -103,7 +105,8 @@ function collectTeamPlayers(teamPrefix) {
       players.push({
         slot: i,
         pid: pid,
-        code: code
+        code: code,
+        hasBase: false //sprint 4 update
       });
     }
   }
@@ -122,7 +125,7 @@ function renderTeamPlayers(containerId, players) {
   players.forEach((player) => {
     const row = document.createElement("div");
     row.style.display = "grid";
-    row.style.gridTemplateColumns = "46px 120px 1fr";
+    row.style.gridTemplateColumns = "46px 120px 1fr 50px"; //sprint 4 update
     row.style.gap = "8px";
     row.style.alignItems = "center";
     row.style.padding = "6px 8px";
@@ -130,21 +133,33 @@ function renderTeamPlayers(containerId, players) {
     row.style.background = "rgba(255,255,255,0.08)";
     row.style.border = "1px solid rgba(255,255,255,0.15)";
     row.style.fontFamily = "monospace";
+
+    const baseIcon = player.hasBase //sprint 4 update
+      ? `<img src="${BASE_ICON_PATH}" style="width:20px;height:20px;">` //sprint 4 update
+      : ""; //sprint 4 update
+
     row.innerHTML = `
       <div>${player.slot}</div>
       <div>${player.pid || "-"}</div>
       <div>${player.code || "-"}</div>
+      <div>${baseIcon}</div> <!-- sprint 4 update -->
     `;
     container.appendChild(row);
   });
 }
 
-function showPlayActionDisplay() {
-  const redPlayers = collectTeamPlayers("red");
-  const greenPlayers = collectTeamPlayers("green");
+function formatTime(seconds) { //sprint 4 update
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+}
 
-  renderTeamPlayers("redPlayList", redPlayers);
-  renderTeamPlayers("greenPlayList", greenPlayers);
+function showPlayActionDisplay() {
+  redPlayersState = collectTeamPlayers("red"); //sprint 4 update
+  greenPlayersState = collectTeamPlayers("green"); //sprint 4 update
+
+  renderTeamPlayers("redPlayList", redPlayersState);
+  renderTeamPlayers("greenPlayList", greenPlayersState);
 
   document.getElementById("entry").classList.add("hidden");
   document.getElementById("play").classList.remove("hidden");
@@ -163,7 +178,32 @@ function showPlayActionDisplay() {
 
     if (timeLeft <= 0) {
       clearInterval(window.photonCountdown);
-      timerEl.textContent = "GO";
+
+      let gameTime = 360; //sprint 4 update
+
+      window.photonCountdown = setInterval(() => { //sprint 4 update
+        gameTime--; //sprint 4 update
+        timerEl.textContent = formatTime(gameTime); //sprint 4 update
+
+        if (gameTime <= 0) { //sprint 4 update
+          clearInterval(window.photonCountdown); //sprint 4 update
+          timerEl.textContent = "0:00"; //sprint 4 update
+        }
+      }, 1000); //sprint 4 update
     }
   }, 1000);
 }
+
+function markPlayerBase(pid) { //sprint 4 update
+  redPlayersState.forEach(p => {
+    if (p.pid === pid) p.hasBase = true;
+  });
+  greenPlayersState.forEach(p => {
+    if (p.pid === pid) p.hasBase = true;
+  });
+
+  renderTeamPlayers("redPlayList", redPlayersState);
+  renderTeamPlayers("greenPlayList", greenPlayersState);
+}
+
+window.markPlayerBase = markPlayerBase; //sprint 4 update

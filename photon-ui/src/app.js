@@ -154,6 +154,18 @@ function formatTime(seconds) { //sprint 4 update
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
+//sends the game start signal 202
+async function sendGameStartSignal() {
+  try {
+    await fetch("http://localhost:8080/api/startGame", {
+      method: "POST"
+    });
+    console.log("Sent start signal (202)");
+  } catch (error) {
+    console.log("Error sending start signal", error);
+  }
+}
+
 function showPlayActionDisplay() {
   redPlayersState = collectTeamPlayers("red"); //sprint 4 update
   greenPlayersState = collectTeamPlayers("green"); //sprint 4 update
@@ -172,7 +184,7 @@ function showPlayActionDisplay() {
     clearInterval(window.photonCountdown);
   }
 
-  window.photonCountdown = setInterval(() => {
+  window.photonCountdown = setInterval(async () => {
     timeLeft--;
     timerEl.textContent = timeLeft;
 
@@ -180,6 +192,9 @@ function showPlayActionDisplay() {
       clearInterval(window.photonCountdown);
 
       let gameTime = 360; //sprint 4 update
+
+      // send 202 when countdown finishes
+      await sendGameStartSignal();
 
       window.photonCountdown = setInterval(() => { //sprint 4 update
         gameTime--; //sprint 4 update

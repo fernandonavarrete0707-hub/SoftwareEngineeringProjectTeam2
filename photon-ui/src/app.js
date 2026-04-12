@@ -180,6 +180,10 @@ function showPlayActionDisplay() {
   const timerEl = document.getElementById("countdownTimer");
   timerEl.textContent = timeLeft;
 
+  //select and load track for game loop
+  let track = Math.floor(Math.random() * 8) + 1;
+  const audio = new Audio("../assets/photon_tracks/Track0" + track + ".mp3");
+
   if (window.photonCountdown) {
     clearInterval(window.photonCountdown);
   }
@@ -206,6 +210,12 @@ function showPlayActionDisplay() {
         }
       }, 1000); //sprint 4 update
     }
+
+    //play the track at 15 seconds remaining
+    if(timeLeft == 15) {
+      audio.play();
+    }
+
   }, 1000);
 }
 
@@ -222,3 +232,6 @@ function markPlayerBase(pid) { //sprint 4 update
 }
 
 window.markPlayerBase = markPlayerBase; //sprint 4 update
+
+//sound effect methods
+//

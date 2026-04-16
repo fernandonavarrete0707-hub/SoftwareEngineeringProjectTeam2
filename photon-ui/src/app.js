@@ -28,14 +28,6 @@ function buildTeamGrid(containerId, teamPrefix) {
     code.placeholder = "codename";
     code.id = `${teamPrefix}_code_${i}`;
     grid.appendChild(code);
-
-    //added the third column
-    const hardware = document.createElement("input");
-    hardware.className = "cell";
-    hardware.type = "text";
-    hardware.placeholder = "hardware id";
-    hardware.id = `${teamPrefix}_hw_${i}`;
-    grid.appendChild(hardware);
   }
 }
 
@@ -46,12 +38,10 @@ function showEntry() {
 
 function clearPlayers() {
   for (let i = 0; i < 15; i++) {
-    document.getElementById(`red_pid_${i}`).value = "";
-    document.getElementById(`red_code_${i}`).value = "";
-    document.getElementById(`red_hw_${i}`).value = "";
-    document.getElementById(`green_pid_${i}`).value = "";
-    document.getElementById(`green_code_${i}`).value = "";
-    document.getElementById(`green_hw_${i}`).value = "";
+      document.getElementById(`red_pid_${i}`).value = "";
+      document.getElementById(`red_code_${i}`).value = "";
+      document.getElementById(`green_pid_${i}`).value = "";
+      document.getElementById(`green_code_${i}`).value = "";
   }
 }
 
@@ -100,93 +90,54 @@ document.addEventListener("DOMContentLoaded", () => {
 //sprint 3
 function collectTeamPlayers(teamPrefix) {
   const players = [];
-
   for (let i = 0; i < 15; i++) {
-    const pid = document.getElementById(`${teamPrefix}_pid_${i}`)?.value.trim();
-    const code = document.getElementById(`${teamPrefix}_code_${i}`)?.value.trim();
-    const hw = document.getElementById(`${teamPrefix}_hw_${i}`)?.value.trim();
-
-    if (pid !== "" || code !== "" || hw !== "") {
+    const pid = document.getElementById(`${teamPrefix}_pid_${i}`).value.trim();
+    const code = document.getElementById(`${teamPrefix}_code_${i}`).value.trim();
+    if (pid !== "" || code !== "") {
       players.push({
+        slot: i,
         pid: pid,
-        code: code || "-",
-        hardwareId: hw || "-",
-        points: 0,
-        hasBase: false
+        code: code,
+        hasBase: false //sprint 4 update
       });
     }
   }
-
   return players;
 }
 
-function renderTeamPlayers(containerId, players, totalId) {
+function renderTeamPlayers(containerId, players) {
   const container = document.getElementById(containerId);
-  const totalEl = document.getElementById(totalId);
-
   container.innerHTML = "";
 
   if (players.length === 0) {
     container.innerHTML = `<div style="padding:8px 10px;font-family:monospace;opacity:.8;">no players entered</div>`;
-    if (totalEl) totalEl.textContent = "Team Total: 0";
     return;
   }
 
-  players.sort((a, b) => b.points - a.points || a.code.localeCompare(b.code));
-
-  const header = document.createElement("div");
-  header.className = "play-header";
-  header.innerHTML = `
-    <div>Player</div>
-    <div>Hardware</div>
-    <div style="text-align:right;">Points</div>
-    <div></div>
-  `;
-  container.appendChild(header);
-
   players.forEach((player) => {
     const row = document.createElement("div");
-    row.className = "play-row";
+    row.style.display = "grid";
+    row.style.gridTemplateColumns = "46px 120px 1fr 50px"; //sprint 4 update
+    row.style.gap = "8px";
+    row.style.alignItems = "center";
+    row.style.padding = "6px 8px";
+    row.style.marginBottom = "6px";
+    row.style.background = "rgba(255,255,255,0.08)";
+    row.style.border = "1px solid rgba(255,255,255,0.15)";
+    row.style.fontFamily = "monospace";
 
-    const baseIcon = player.hasBase
-      ? `<img src="${BASE_ICON_PATH}" style="width:20px;height:20px;">`
-      : "";
+    const baseIcon = player.hasBase //sprint 4 update
+      ? `<img src="${BASE_ICON_PATH}" style="width:20px;height:20px;">` //sprint 4 update
+      : ""; //sprint 4 update
 
     row.innerHTML = `
-      <div class="player-name">${player.code || "-"}</div>
-      <div class="player-hardware">${player.hardwareId || "-"}</div>
-      <div class="player-points">${player.points ?? 0}</div>
-      <div>${baseIcon}</div>
+      <div>${player.slot}</div>
+      <div>${player.pid || "-"}</div>
+      <div>${player.code || "-"}</div>
+      <div>${baseIcon}</div> <!-- sprint 4 update -->
     `;
-
     container.appendChild(row);
   });
-
-  const teamTotal = players.reduce((sum, p) => sum + (p.points || 0), 0);
-  if (totalEl) totalEl.textContent = `Team Total: ${teamTotal}`;
-}
-
-function refreshPlayLists() {
-  renderTeamPlayers("redPlayList", redPlayersState, "redTeamTotal");
-  renderTeamPlayers("greenPlayList", greenPlayersState, "greenTeamTotal");
-  updateLeadingTeamFlash();
-}
-
-function updateLeadingTeamFlash() {
-  const redTotalEl = document.getElementById("redTeamTotal");
-  const greenTotalEl = document.getElementById("greenTeamTotal");
-
-  const redTotal = redPlayersState.reduce((sum, p) => sum + (p.points || 0), 0);
-  const greenTotal = greenPlayersState.reduce((sum, p) => sum + (p.points || 0), 0);
-
-  redTotalEl?.classList.remove("leading-team");
-  greenTotalEl?.classList.remove("leading-team");
-
-  if (redTotal > greenTotal) {
-    redTotalEl?.classList.add("leading-team");
-  } else if (greenTotal > redTotal) {
-    greenTotalEl?.classList.add("leading-team");
-  }
 }
 
 function formatTime(seconds) { //sprint 4 update
@@ -195,49 +146,12 @@ function formatTime(seconds) { //sprint 4 update
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-function awardOpposingHit(shooterHardwareId, targetHardwareId) {
-  let shooter = null;
-
-  shooter = redPlayersState.find(p => String(p.hardwareId) === String(shooterHardwareId))
-         || greenPlayersState.find(p => String(p.hardwareId) === String(shooterHardwareId));
-
-  if (shooter) {
-    shooter.points += 10;
-    refreshPlayLists();
-  }
-}
-
-function applyFriendlyFire(shooterHardwareId, targetHardwareId) {
-  const shooter = redPlayersState.find(p => String(p.hardwareId) === String(shooterHardwareId))
-               || greenPlayersState.find(p => String(p.hardwareId) === String(shooterHardwareId));
-
-  const target = redPlayersState.find(p => String(p.hardwareId) === String(targetHardwareId))
-              || greenPlayersState.find(p => String(p.hardwareId) === String(targetHardwareId));
-
-  if (shooter) shooter.points -= 10;
-  if (target) target.points -= 10;
-
-  refreshPlayLists();
-}
-
-//sends the game start signal 202
-async function sendGameStartSignal() {
-  try {
-    await fetch("http://localhost:8080/api/startGame", {
-      method: "POST"
-    });
-    console.log("Sent start signal (202)");
-  } catch (error) {
-    console.log("Error sending start signal", error);
-  }
-}
-
-
 function showPlayActionDisplay() {
   redPlayersState = collectTeamPlayers("red"); //sprint 4 update
   greenPlayersState = collectTeamPlayers("green"); //sprint 4 update
 
-  refreshPlayLists();
+  renderTeamPlayers("redPlayList", redPlayersState);
+  renderTeamPlayers("greenPlayList", greenPlayersState);
 
   document.getElementById("entry").classList.add("hidden");
   document.getElementById("play").classList.remove("hidden");
@@ -246,15 +160,11 @@ function showPlayActionDisplay() {
   const timerEl = document.getElementById("countdownTimer");
   timerEl.textContent = timeLeft;
 
-  //select and load track for game loop
-  let track = Math.floor(Math.random() * 8) + 1;
-  const audio = new Audio("../assets/photon_tracks/Track0" + track + ".mp3");
-
   if (window.photonCountdown) {
     clearInterval(window.photonCountdown);
   }
 
-  window.photonCountdown = setInterval(async () => {
+  window.photonCountdown = setInterval(() => {
     timeLeft--;
     timerEl.textContent = timeLeft;
 
@@ -262,9 +172,7 @@ function showPlayActionDisplay() {
       clearInterval(window.photonCountdown);
 
       let gameTime = 360; //sprint 4 update
-
-      // send 202 when countdown finishes
-      await sendGameStartSignal();
+      timerEl.textContent = formatTime(gameTime); //sprint 4 update
 
       window.photonCountdown = setInterval(() => { //sprint 4 update
         gameTime--; //sprint 4 update
@@ -276,38 +184,19 @@ function showPlayActionDisplay() {
         }
       }, 1000); //sprint 4 update
     }
-
-    //play the track at 15 seconds remaining
-    if(timeLeft == 15) {
-      audio.play();
-    }
-
   }, 1000);
 }
 
-function markPlayerBase(pid) {
+function markPlayerBase(pid) { //sprint 4 update
   redPlayersState.forEach(p => {
-    if (p.pid === pid) {
-      p.hasBase = true;
-      p.points += 100;
-    }
+    if (p.pid === pid) p.hasBase = true;
   });
-
   greenPlayersState.forEach(p => {
-    if (p.pid === pid) {
-      p.hasBase = true;
-      p.points += 100;
-    }
+    if (p.pid === pid) p.hasBase = true;
   });
 
-  refreshPlayLists();
+  renderTeamPlayers("redPlayList", redPlayersState);
+  renderTeamPlayers("greenPlayList", greenPlayersState);
 }
 
 window.markPlayerBase = markPlayerBase; //sprint 4 update
-window.awardOpposingHit = awardOpposingHit;
-window.applyFriendlyFire = applyFriendlyFire;
-window.refreshPlayLists = refreshPlayLists;
-
-
-//sound effect methods
-//

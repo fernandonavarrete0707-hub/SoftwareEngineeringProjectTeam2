@@ -8,10 +8,13 @@
 </head>
 <body>
 
+  <!--splash screen - shows for 3 seconds & click to skip-->
   <div id="splash" class="screen splash">
     <div class="splash-card">
       <div class="splash-logo">
+        <!--put prof Strothers logo file here later or find new one-->
         <img id="logoImg" src="../assets/logo.png" alt="Photon Logo" onerror="this.style.display='none';" />
+        <!--<div id="logoFallback">PHOTON</div>-->
       </div>
 
       <div class="splash-sub">initializing…</div>
@@ -19,6 +22,7 @@
     </div>
   </div>
 
+  <!--my player entry screen-->
   <div id="entry" class="screen entry hidden">
     <div class="titlebar">Entry Terminal</div>
     <div class="header">Edit Current Game</div>
@@ -45,8 +49,8 @@
       </div>
 
       <div class="fkey-row">
-        <div class="fkey primary" id="PreenteredPlayersBtn"><div class="fnum">F5</div><div class="ftext">Get Existing<br/>Players</div></div>
-        <div class="fkey primary" id="AddrBtn"><div class="fnum">F7</div><div class="ftext">Change<br/>Address</div></div>
+        <div class="fkey"><div class="fnum">F5</div><div class="ftext">Preentered<br/>Games</div></div>
+        <div class="fkey"><div class="fnum">F7</div><div class="ftext">&nbsp;</div></div>
         <div class="fkey"><div class="fnum">F8</div><div class="ftext">View<br/>Game</div></div>
       </div>
 
@@ -70,14 +74,12 @@
     <div class="board">
       <div class="team red">
         <div class="team-label">RED TEAM</div>
-        <div id="redPlayList" class="play-list"></div>
-        <div id="redTeamTotal" class="team-total">Team Total: 0</div>
+        <div id="redPlayList" style="min-height:420px;"></div>
       </div>
 
       <div class="team green">
         <div class="team-label">GREEN TEAM</div>
-        <div id="greenPlayList" class="play-list"></div>
-        <div id="greenTeamTotal" class="team-total">Team Total: 0</div>
+        <div id="greenPlayList" style="min-height:420px;"></div>
       </div>
     </div>
 

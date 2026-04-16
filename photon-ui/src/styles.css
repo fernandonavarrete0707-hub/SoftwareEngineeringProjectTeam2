@@ -124,14 +124,12 @@ body{
 .team.red .team-label{ color:#ff6a6a; }
 .team.green .team-label{ color:#60ff60; }
 
-/*changed the grid layout so it can fit the third column*/
 .grid{
   display:grid;
-  grid-template-columns: 46px 110px 1fr 110px; 
+  grid-template-columns: 46px 1fr 1fr;
   gap: 6px 8px;
   align-items:center;
 }
-
 
 .slot{
   display:flex;
@@ -208,74 +206,4 @@ body{
   text-align:center;
   opacity:0.85;
   font-size: 12px;
-}
-
-.play-list{
-  min-height: 420px;
-}
-
-.play-header,
-.play-row{
-  display:grid;
-  grid-template-columns: 1.7fr 1fr 0.8fr 40px;
-  gap: 10px;
-  align-items:center;
-  padding: 8px 10px;
-  margin-bottom: 6px;
-  font-family: monospace;
-}
-
-.play-header{
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border: 1px solid rgba(255,255,255,0.25);
-  background: rgba(255,255,255,0.08);
-}
-
-.play-row{
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.08);
-}
-
-.team.red .play-header,
-.team.red .play-row{
-  border-color: rgba(255,160,160,0.25);
-}
-
-.team.green .play-header,
-.team.green .play-row{
-  border-color: rgba(120,255,120,0.25);
-}
-
-.player-name{
-  font-weight: 700;
-}
-
-.player-points{
-  text-align: right;
-  font-weight: 700;
-}
-
-.player-hardware{
-  opacity: 0.95;
-}
-
-.team-total{
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 2px solid rgba(255,255,255,0.14);
-  font-family: monospace;
-  font-size: 18px;
-  font-weight: 800;
-  text-align: right;
-}
-
-.leading-team{
-  animation: teamFlash 0.8s linear infinite alternate;
-}
-
-@keyframes teamFlash{
-  from { opacity: 1; }
-  to   { opacity: 0.35; }
 }

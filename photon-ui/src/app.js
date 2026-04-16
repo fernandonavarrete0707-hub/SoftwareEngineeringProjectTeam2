@@ -28,6 +28,17 @@ function buildTeamGrid(containerId, teamPrefix) {
     code.placeholder = "codename";
     code.id = `${teamPrefix}_code_${i}`;
     grid.appendChild(code);
+
+    const spacer = document.createElement("div"); //sprint 4 update
+    spacer.className = "slot-spacer"; //sprint 4 update
+    grid.appendChild(spacer); //sprint 4 update
+
+    const hardware = document.createElement("input"); //sprint 4 update
+    hardware.className = "cell hardware-cell"; //sprint 4 update
+    hardware.type = "text"; //sprint 4 update
+    hardware.placeholder = "hardware id"; //sprint 4 update
+    hardware.id = `${teamPrefix}_hw_${i}`; //sprint 4 update
+    grid.appendChild(hardware); //sprint 4 update
   }
 }
 
@@ -40,8 +51,10 @@ function clearPlayers() {
   for (let i = 0; i < 15; i++) {
       document.getElementById(`red_pid_${i}`).value = "";
       document.getElementById(`red_code_${i}`).value = "";
+      document.getElementById(`red_hw_${i}`).value = ""; //sprint 4 update
       document.getElementById(`green_pid_${i}`).value = "";
       document.getElementById(`green_code_${i}`).value = "";
+      document.getElementById(`green_hw_${i}`).value = ""; //sprint 4 update
   }
 }
 
@@ -93,11 +106,13 @@ function collectTeamPlayers(teamPrefix) {
   for (let i = 0; i < 15; i++) {
     const pid = document.getElementById(`${teamPrefix}_pid_${i}`).value.trim();
     const code = document.getElementById(`${teamPrefix}_code_${i}`).value.trim();
-    if (pid !== "" || code !== "") {
+    const hardwareId = document.getElementById(`${teamPrefix}_hw_${i}`).value.trim(); //sprint 4 update
+    if (pid !== "" || code !== "" || hardwareId !== "") { //sprint 4 update
       players.push({
         slot: i,
         pid: pid,
         code: code,
+        hardwareId: hardwareId, //sprint 4 update
         hasBase: false //sprint 4 update
       });
     }
@@ -117,7 +132,7 @@ function renderTeamPlayers(containerId, players) {
   players.forEach((player) => {
     const row = document.createElement("div");
     row.style.display = "grid";
-    row.style.gridTemplateColumns = "46px 120px 1fr 50px"; //sprint 4 update
+    row.style.gridTemplateColumns = "46px 120px 1fr 70px"; //sprint 4 update
     row.style.gap = "8px";
     row.style.alignItems = "center";
     row.style.padding = "6px 8px";
@@ -134,7 +149,7 @@ function renderTeamPlayers(containerId, players) {
       <div>${player.slot}</div>
       <div>${player.pid || "-"}</div>
       <div>${player.code || "-"}</div>
-      <div>${baseIcon}</div> <!-- sprint 4 update -->
+      <div>${baseIcon}</div>
     `;
     container.appendChild(row);
   });
@@ -187,12 +202,12 @@ function showPlayActionDisplay() {
   }, 1000);
 }
 
-function markPlayerBase(pid) { //sprint 4 update
+function markPlayerBase(identifier) { //sprint 4 update
   redPlayersState.forEach(p => {
-    if (p.pid === pid) p.hasBase = true;
+    if (p.pid === identifier || p.hardwareId === identifier) p.hasBase = true;
   });
   greenPlayersState.forEach(p => {
-    if (p.pid === pid) p.hasBase = true;
+    if (p.pid === identifier || p.hardwareId === identifier) p.hasBase = true;
   });
 
   renderTeamPlayers("redPlayList", redPlayersState);

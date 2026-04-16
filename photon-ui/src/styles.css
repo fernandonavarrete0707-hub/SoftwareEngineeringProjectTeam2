@@ -207,3 +207,6 @@ body{
   opacity:0.85;
   font-size: 12px;
 }
+
+.slot-spacer { visibility: hidden; } /*sprint 4 update*/
+.hardware-cell { grid-column: span 2; } /*sprint 4 update*/

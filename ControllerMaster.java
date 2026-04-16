@@ -78,7 +78,23 @@ public class ControllerMaster {
                 return;
             }
 
-            // Friendly fire aka same team
+            //red team score on the green team base = code 53
+            if (shooter.team.equalsIgnoreCase("Red") && target.team.equalsIgnoreCase("Green") && target.codename.equalsIgnoreCase("Base")) {
+                Udp.broadcastInt(53);
+                System.out.println("Red team scored on Green base: " +
+                        shooter.hardwareId + " -> " + target.hardwareId);
+                return;
+            }
+            
+            //green team score on the red team base = code 43
+            if (shooter.team.equalsIgnoreCase("Green") && target.team.equalsIgnoreCase("Red") && target.codename.equalsIgnoreCase("Base")) {
+                Udp.broadcastInt(43);
+                System.out.println("Green team scored on Red base: " +
+                        shooter.hardwareId + " -> " + target.hardwareId);
+                return;
+            }
+
+            // Friendly fire aka same team 
             if (shooter.team.equalsIgnoreCase(target.team)) {
                 Udp.broadcastInt(shooter.hardwareId);
                 Udp.broadcastInt(target.hardwareId);
@@ -86,7 +102,7 @@ public class ControllerMaster {
                 System.out.println("Friendly fire detected: " +
                         shooter.hardwareId + " -> " + target.hardwareId);
             } else {
-                // Normal hit
+                // Normal hit 
                 Udp.broadcastInt(target.hardwareId);
 
                 System.out.println("Normal hit: " +
@@ -167,3 +183,4 @@ public class ControllerMaster {
         }
     }
 }
+

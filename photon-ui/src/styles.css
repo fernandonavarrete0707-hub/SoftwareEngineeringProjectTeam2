@@ -1,0 +1,212 @@
+/* photon ui styles
+handles splash screen and player entry screen layout
+color palette and theme variables defined below*/
+
+/*variables section for colors*/
+:root{
+  --bg:#0b0b0d;
+  --panel:#13131a;
+  --text:#e8e8ef;
+
+  --red1:#2a0000;
+  --red2:#4a0000;
+  --redBorder:#8a1a1a;
+
+  --green1:#001f00;
+  --green2:#003300;
+  --greenBorder:#1f7a1f;
+
+  --keyBorder:#6b6b6b;
+  --keyText:#34ff4d;
+}
+
+/*basestyles*/
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family: "DejaVu Sans", Arial, sans-serif;
+}
+
+/*screens*/
+.screen{ min-height:100vh; display:flex; align-items:center; justify-content:center; }
+.hidden{ display:none !important; }
+
+/*splash*/
+.splash{
+  background: radial-gradient(ellipse at center, #1b1b27 0%, #07070a 70%);
+}
+.splash-card{
+  width:min(700px, 92vw);
+  background: rgba(0,0,0,0.45);
+  border: 2px solid rgba(255,255,255,0.12);
+  padding: 28px;
+  text-align:center;
+}
+.splash-logo{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+}
+#logoImg{
+  max-width: 420px;
+  width: 70%;
+  height:auto;
+  image-rendering:auto;
+}
+#logoFallback{
+  font-size: 48px;
+  letter-spacing: 4px;
+  font-weight: 800;
+}
+.splash-sub{ opacity:0.8; margin-top:8px; margin-bottom:18px; }
+.btn{
+  padding:10px 14px;
+  background:#222;
+  color:#fff;
+  border:1px solid #444;
+  cursor:pointer;
+}
+.btn:hover{ filter:brightness(1.15); }
+
+/* entry layout */
+.entry{
+  padding: 18px;
+  align-items:flex-start;
+  justify-content:center;
+}
+.titlebar{
+  position:fixed;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  font-weight:700;
+  opacity:0.9;
+}
+.header{
+  width:100%;
+  text-align:center;
+  margin-top:20px;
+  font-size: 28px;
+  font-weight: 700;
+  color:#7aa2ff;
+  text-shadow: 0 0 10px rgba(70,120,255,0.25);
+}
+.board{
+  margin-top: 14px;
+  width:min(980px, 95vw);
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.team{
+  padding: 10px 10px 14px;
+  border: 2px solid rgba(255,255,255,0.12);
+  background: var(--panel);
+}
+.team.red{
+  background: linear-gradient(180deg, var(--red2), var(--red1));
+  border-color: var(--redBorder);
+}
+.team.green{
+  background: linear-gradient(180deg, var(--green2), var(--green1));
+  border-color: var(--greenBorder);
+}
+.team-label{
+  font-weight: 800;
+  text-align:center;
+  padding: 4px 0 10px;
+  letter-spacing: 1px;
+  opacity:0.95;
+}
+.team.red .team-label{ color:#ff6a6a; }
+.team.green .team-label{ color:#60ff60; }
+
+.grid{
+  display:grid;
+  grid-template-columns: 46px 1fr 1fr;
+  gap: 6px 8px;
+  align-items:center;
+}
+
+.slot{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  opacity:0.9;
+  font-family: monospace;
+}
+.checkbox{
+  width: 10px;
+  height: 10px;
+  border:1px solid rgba(255,255,255,0.35);
+  display:inline-block;
+}
+.slotnum{ width:26px; text-align:right; }
+
+.cell{
+  height: 26px;
+  background: rgba(240,240,240,0.9);
+  border: 1px solid rgba(0,0,0,0.55);
+  padding: 2px 6px;
+  font-family: monospace;
+  font-size: 14px;
+}
+.team.red .cell{ border-color: rgba(138,26,26,0.9); }
+.team.green .cell{ border-color: rgba(31,122,31,0.9); }
+
+.mode{
+  width:min(980px, 95vw);
+  margin-top: 10px;
+  text-align:center;
+  opacity:0.85;
+  font-size: 13px;
+}
+
+.footer{
+  width:min(980px, 95vw);
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 2px solid rgba(255,255,255,0.10);
+}
+
+.fkey-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin: 10px 0;
+}
+
+.fkey{
+  flex:1;
+  min-width: 140px;
+  border: 2px solid var(--keyBorder);
+  background: rgba(0,0,0,0.35);
+  padding: 10px 8px;
+  text-align:center;
+}
+.fkey .fnum{
+  color: var(--keyText);
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+.fkey .ftext{
+  color: var(--keyText);
+  font-weight: 700;
+  line-height: 1.05;
+  font-size: 14px;
+}
+.fkey.primary{ border-color:#55ff55; }
+.fkey.danger{ border-color:#ff6a6a; }
+
+.hint{
+  margin-top: 8px;
+  text-align:center;
+  opacity:0.85;
+  font-size: 12px;
+}
+
+.slot-spacer { visibility: hidden; } /*sprint 4 update*/
+.hardware-cell { grid-column: span 2; } /*sprint 4 update*/
